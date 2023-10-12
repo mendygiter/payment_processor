@@ -17,6 +17,7 @@ app.post("/create-checkout-session", async (req, res) => {
     try{
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
+            mode: "payment",
             line_items: req.body.items.map(item => {
                 const storeItem = storeItems.get(item.id)
                 return {
@@ -25,16 +26,15 @@ app.post("/create-checkout-session", async (req, res) => {
                         product_data: {
                             name: storeItem.name
                         },
-                        unit_amount: storeItems.priceInCents
+                        unit_amount: storeItem.priceInCents
                     },
                     quantity: item.quantity
                 }
             }),
-            mode: "payment",
-            success_url:`${process.env.server_URL}/success.html`,
-            cancel_url: `${process.env.server_URL}/cancel.html`
+            success_url: `${process.env.SERVER_URL}/success.html`,
+            cancel_url:  `${process.env.SERVER_URL}/cancel.html`
         })
-        res.json({ url: session.url })
+        res.json({ url: session.url });
     } catch (e) {
         res.status(500).json({error: e.message})
     }
