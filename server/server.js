@@ -8,32 +8,32 @@ app.use(express.static("public"))
 
 const stripe = require("stripe") (process.env.STRIPE_PRIVATE_KEY)
 
-const storeItems = new Map([
-    [1, {priceInCents: 1000, name: "Product_1"}],
-    [2, {priceInCents: 2500, name: "Product_2"}],
-])
 
-app.post("/create-checkout-session", async (req, res) => {
-    try{
+
+app.post('/create-checkout-session', async (req, res) => {
+    try {
+        const { name, email, product } = req.body;
+
         const session = await stripe.checkout.sessions.create({
-            payment_method_types: ["card"],
-            mode: "payment",
-            line_items: req.body.items.map(item => {
-                const storeItem = storeItems.get(item.id)
-                return {
+            payment_method_types: ['card'],
+            line_items: [
+                {
                     price_data: {
-                        currency: "usd",
+                        currency: 'usd',
                         product_data: {
-                            name: storeItem.name
+                            name: product.name, // Use the product name from the request
                         },
-                        unit_amount: storeItem.priceInCents
+                        unit_amount: product.price, // Use the product price from the request
                     },
-                    quantity: item.quantity
-                }
-            }),
-            success_url: `${process.env.SERVER_URL}/success.html`,
-            cancel_url:  `${process.env.SERVER_URL}/cancel.html`
-        })
+                    quantity: 1, // Assuming the user wants to purchase one of the selected product
+                },
+            ],
+            mode: 'payment',
+            success_url: `${process.env.server_URL}/success.html`,
+            cancel_url: `${process.env.server_URL}/cancel.html`,
+            customer_email: email,
+            client_reference_id: name,
+        });
         res.json({ url: session.url });
     } catch (e) {
         res.status(500).json({error: e.message})

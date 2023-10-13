@@ -1,19 +1,43 @@
+
+/*document.getElementById("checkout-form").addEventListener("submit", function (event) {
+    event.preventDefault();*/
 const button = document.querySelector("button")
 button.addEventListener("click", () => {
+
     fetch("/create-checkout-session", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            items: [
-                {id: 1, quantity: 3},
-                {id: 2, quantity: 1}
-            ],
+            name: name,
+            email: email,
+            product: products[selectedProduct],
+        }),
+    })
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const selectedProduct = document.getElementById("product").value;
+
+    const products = {
+        product1: {name: "Product 1", price: 100000},
+        product2: {name: "Product 2", price: 120000}
+    };
+
+    fetch("/create-checkout-session", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            name: name,
+            email: email,
+            product: products[selectedProduct],
         }),
     })
         .then(res => {
-           /* if (res.ok) res.json()*/
+            /* if (res.ok) res.json()*/
             if (res.ok) {
                 return res.json();
             } else {
@@ -27,4 +51,6 @@ button.addEventListener("click", () => {
         .catch(e => {
             console.error(e.error)
         })
+
+
 })
