@@ -7,9 +7,6 @@ app.use(express.json())
 app.use(express.static("public"))
 
 const stripe = require("stripe") (process.env.STRIPE_PRIVATE_KEY)
-
-
-
 app.post('/create-checkout-session', async (req, res) => {
     try {
         const { name, email, product } = req.body;
@@ -21,11 +18,11 @@ app.post('/create-checkout-session', async (req, res) => {
                     price_data: {
                         currency: 'usd',
                         product_data: {
-                            name: product.name, // Use the product name from the request
+                            name: product.name,
                         },
-                        unit_amount: product.price, // Use the product price from the request
+                        unit_amount: product.price,
                     },
-                    quantity: 1, // Assuming the user wants to purchase one of the selected product
+                    quantity: 1,
                 },
             ],
             mode: 'payment',

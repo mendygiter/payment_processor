@@ -1,8 +1,13 @@
+document.getElementById("checkout-form").addEventListener("submit", function (event) {
+    event.preventDefault();
 
-/*document.getElementById("checkout-form").addEventListener("submit", function (event) {
-    event.preventDefault();*/
+/*
 const button = document.querySelector("button")
+*/
 button.addEventListener("click", () => {
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const selectedProduct = document.getElementById("product").value;
 
     fetch("/create-checkout-session", {
         method: "POST",
@@ -15,10 +20,6 @@ button.addEventListener("click", () => {
             product: products[selectedProduct],
         }),
     })
-
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const selectedProduct = document.getElementById("product").value;
 
     const products = {
         product1: {name: "Product 1", price: 100000},
