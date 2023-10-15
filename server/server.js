@@ -11,6 +11,11 @@ app.post('/create-checkout-session', async (req, res) => {
     try {
         const { name, email, product } = req.body;
 
+        console.log("Received data:");
+        console.log("Name:", name);
+        console.log("Email:", email);
+        console.log("Product:", product);
+
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             line_items: [
@@ -33,6 +38,7 @@ app.post('/create-checkout-session', async (req, res) => {
         });
         res.json({ url: session.url });
     } catch (e) {
+        console.error("Error", e)
         res.status(500).json({error: e.message})
     }
 })
