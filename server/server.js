@@ -26,15 +26,15 @@ app.post('/create-checkout-session', async (req, res) => {
                             name: product.name,
                         },
                         unit_amount: product.price,
+                        
                     },
-                    quantity: 1,
-                },
+                    quantity: 1,                },
             ],
             mode: 'payment',
-            success_url: `${process.env.server_URL}/success.html`,
-            cancel_url: `${process.env.server_URL}/cancel.html`,
+            
+            success_url: `${process.env.SERVER_URL}/success.html`,
+            cancel_url: `${process.env.SERVER_URL}/cancel.html`,
             customer_email: email,
-            client_reference_id: name,
         });
         res.json({ url: session.url });
     } catch (e) {
@@ -43,4 +43,4 @@ app.post('/create-checkout-session', async (req, res) => {
     }
 })
 
-app.listen(8000)
+app.listen(5001)
